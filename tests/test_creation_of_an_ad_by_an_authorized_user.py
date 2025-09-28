@@ -1,8 +1,8 @@
-import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from helpers import register_user, login_user, generate_user_data
+
+from helpers import generate_user_data, login_user, register_user
 
 def test_create_ad_authorized(driver):
     email, password = generate_user_data()
