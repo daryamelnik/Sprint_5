@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from helpers import register_user, login_user, generate_user_data
-from urls import UrbanRoutesUrl
+from urls import RoutesUrl
 
 def test_logout(driver):
     email, password = generate_user_data()
@@ -10,7 +10,7 @@ def test_logout(driver):
     # First, register the user
     register_user(driver, email, password)
     wait = WebDriverWait(driver, 10)
-    wait.until(EC.url_to_be(UrbanRoutesUrl.registration_url))
+    wait.until(EC.url_to_be(RoutesUrl.registration_url))
 
     # Now, log in
     login_user(driver, email, password)
