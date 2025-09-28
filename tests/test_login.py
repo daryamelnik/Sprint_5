@@ -1,32 +1,24 @@
-import time
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from helpers import register_user, login_user
+from helpers import login_user
+from locators import MainPageLocators, TestLoginLocators
 
-def test_login(driver, user_data):
-    email, password = user_data
-    
-    # First, register the user
-    register_user(driver, email, password)
-    wait = WebDriverWait(driver, 10)
-    wait.until(EC.url_to_be("https://qa-desk.stand.praktikum-services.ru/regiatration"))
+class TestLogin:
+    def test_login(self, driver, registered_user):
+        email, password = registered_user
+        wait = WebDriverWait(driver, 10)
 
-    # Assert that the user is logged in
-    assert wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "circleSmall"))).is_displayed()
+        wait.until(EC.element_to_be_clickable(MainPageLocators.USER_PROFILE_ICON)).click()
+        wait.until(EC.element_to_be_clickable(MainPageLocators.LOGOUT_BUTTON)).click()
+        wait.until(EC.visibility_of_element_located(MainPageLocators.LOGIN_REGISTER_BUTTON))
 
-    # Logout
+        # Now, execute the login process
+        login_user(driver, email, password)
 
-    wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "circleSmall"))).click()
-    wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Выйти')]"))).click()
-    wait.until(EC.visibility_of_element_located((By.XPATH, ".//button[text()='Вход и регистрация']")))
+        # Verify that the login was successful
+        assert wait.until(
+            EC.visibility_of_element_located(TestLoginLocators.PRIMARY_BUTTON)).text == 'Разместить объявление'
 
-    # Now, log in
-    login_user(driver, email, password)
+        assert wait.until(EC.visibility_of_element_located(MainPageLocators.USER_PROFILE_ICON)).is_displayed()
 
-    # Verify successful login
-    assert wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "buttonPrimary"))).text == 'Разместить объявление'
-    
-    assert wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "circleSmall"))).is_displayed()
-
-    assert wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "profileText"))).is_displayed()
+        assert wait.until(EC.visibility_of_element_located(TestLoginLocators.PROFILE_TEXT)).is_displayed()

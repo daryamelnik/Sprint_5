@@ -1,27 +1,29 @@
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from helpers import register_user, login_user
+from helpers import register_user, login_user, generate_user_data
+from urls import RoutesUrl
+from locators import MainPageLocators
 
-def test_logout(driver, user_data):
-    email, password = user_data
-    
-    # First, register the user
-    register_user(driver, email, password)
-    wait = WebDriverWait(driver, 10)
-    wait.until(EC.url_to_be("https://qa-desk.stand.praktikum-services.ru/regiatration"))
+class TestLogout:
+    def test_logout(self, driver):
+        email, password = generate_user_data()
 
-    # Now, log in
-    login_user(driver, email, password)
-    wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "circleSmall")))
+        # First, register the user
+        register_user(driver, email, password)
+        wait = WebDriverWait(driver, 10)
+        wait.until(EC.url_to_be(RoutesUrl.registration_url))
 
-    # Logout
-    wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "circleSmall"))).click()
-    wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "btnSmall"))).click()
+        # Now, log in
+        login_user(driver, email, password)
+        wait.until(EC.visibility_of_element_located(MainPageLocators.USER_PROFILE_ICON))
 
-    # Verify that the user is logged out
-    assert wait.until(EC.visibility_of_element_located((By.XPATH, ".//button[text()='Вход и регистрация']"))).is_displayed()
-    
-    # Verify that the user avatar and name are not displayed
-    assert len(driver.find_elements(By.CLASS_NAME, "circleSmall")) == 0
-    assert len(driver.find_elements(By.CLASS_NAME, "profileText")) == 0
+        # Logout
+        wait.until(EC.element_to_be_clickable(MainPageLocators.USER_PROFILE_ICON)).click()
+        wait.until(EC.element_to_be_clickable(MainPageLocators.LOGOUT_BUTTON_PROFILE_DROPDOWN)).click()
+
+        # Verify that the user is logged out
+        assert wait.until(EC.visibility_of_element_located(MainPageLocators.LOGIN_REGISTER_BUTTON)).is_displayed()
+
+        # Verify that the user avatar and name are not displayed
+        assert len(driver.find_elements(*MainPageLocators.USER_PROFILE_ICON)) == 0
+        assert len(driver.find_elements(*MainPageLocators.PROFILE_TEXT)) == 0
