@@ -3,6 +3,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from helpers import generate_user_data, login_user, register_user
+from urls import UrbanRoutesUrl
 
 def test_create_ad_authorized(driver):
     email, password = generate_user_data()
@@ -10,7 +11,7 @@ def test_create_ad_authorized(driver):
     # Register user
     register_user(driver, email, password)
     wait = WebDriverWait(driver, 20)
-    wait.until(EC.url_to_be("https://qa-desk.stand.praktikum-services.ru/regiatration"))
+    wait.until(EC.url_to_be(UrbanRoutesUrl.registration_url))
 
     # Login user
     login_user(driver, email, password)
@@ -21,7 +22,7 @@ def test_create_ad_authorized(driver):
     post_ad_button.click()
 
     # Wait for the create listing page to load
-    wait.until(EC.url_to_be("https://qa-desk.stand.praktikum-services.ru/create-lisiting"))
+    wait.until(EC.url_to_be(UrbanRoutesUrl.create_listing_url))
 
     # Fill out the form
     ad_title = "Test Ad Title"
@@ -48,7 +49,9 @@ def test_create_ad_authorized(driver):
 
     # Go to profile
     wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button.circleSmall"))).click()
-    profile_link = wait.until(EC.visibility_of_element_located((By.XPATH, "//h3[contains( @class, 'profileText name')]")))
+    import time
+    profile_link = wait.until(EC.element_to_be_clickable((By.XPATH, "//h3[contains( @class, 'profileText name')]")))
+    time.sleep(1)
     driver.execute_script("arguments[0].click();", profile_link)
     wait.until(EC.url_contains("/profile"))
 

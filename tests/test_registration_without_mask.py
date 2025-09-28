@@ -3,12 +3,13 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from urls import UrbanRoutesUrl
 
 def generate_invalid_email():
     return "invalid-email"
 
 def test_registration_without_mask(driver):
-    driver.get('https://qa-desk.stand.praktikum-services.ru/')
+    driver.get(UrbanRoutesUrl.base_url)
 
     wait = WebDriverWait(driver, 10)
 
@@ -28,7 +29,7 @@ def test_registration_without_mask(driver):
     error_message = wait.until(EC.visibility_of_element_located((By.XPATH, "//*[contains(text(), 'Ошибка')]")))
     assert error_message.is_displayed()
 
-    assert "https://qa-desk.stand.практикум-сервисы.рф/regiatration" != driver.current_url
+    assert UrbanRoutesUrl.registration_url == driver.current_url
 
     # Verify that the input fields are highlighted in red
     email_field_div = driver.find_element(By.NAME, "email").find_element(By.XPATH, "./..")

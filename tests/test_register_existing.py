@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from helpers import register_user, generate_user_data
+from urls import UrbanRoutesUrl
 
 def test_register_existing_user(driver):
     email, password = generate_user_data()
@@ -9,7 +10,7 @@ def test_register_existing_user(driver):
     # First, register the user
     register_user(driver, email, password)
     wait = WebDriverWait(driver, 10)
-    wait.until(EC.url_to_be("https://qa-desk.stand.praktikum-services.ru/regiatration"))
+    wait.until(EC.url_to_be(UrbanRoutesUrl.registration_url))
 
     # Now, try to register the same user again
     register_user(driver, email, password)

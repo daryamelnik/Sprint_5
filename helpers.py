@@ -4,6 +4,7 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from urls import UrbanRoutesUrl
 
 
 def generate_user_data():
@@ -14,7 +15,7 @@ def generate_user_data():
 
 
 def register_user(driver, email, password):
-    driver.get('https://qa-desk.stand.praktikum-services.ru/')
+    driver.get(UrbanRoutesUrl.base_url)
     wait = WebDriverWait(driver, 10)
 
     # Check if already logged in, then logout
@@ -23,7 +24,7 @@ def register_user(driver, email, password):
         time.sleep(2) # Increased sleep time
         wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Выйти')]"))).click()
         wait.until(EC.visibility_of_element_located((By.XPATH, ".//button[text()='Вход и регистрация']")))
-        driver.get('https://qa-desk.stand.praktikum-services.ru/') # Navigate back to home page after logout
+        driver.get(UrbanRoutesUrl.base_url) # Navigate back to home page after logout
 
     # Navigate to registration form
     wait.until(EC.element_to_be_clickable((By.XPATH, ".//button[text()='Вход и регистрация']"))).click()
@@ -38,7 +39,7 @@ def register_user(driver, email, password):
     driver.find_element(By.XPATH, ".//button[text()='Создать аккаунт']").click()
 
 def login_user(driver, email, password):
-    driver.get('https://qa-desk.stand.praktikum-services.ru/')
+    driver.get(UrbanRoutesUrl.base_url)
     wait = WebDriverWait(driver, 10)
 
     # Check if already logged in

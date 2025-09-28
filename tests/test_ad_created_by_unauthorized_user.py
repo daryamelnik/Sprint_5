@@ -1,10 +1,11 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from urls import UrbanRoutesUrl
 
 
 def test_ad_creation_unauthorized(driver):
-    driver.get('https://qa-desk.stand.praktikum-services.ru/')
+    driver.get(UrbanRoutesUrl.base_url)
     wait = WebDriverWait(driver, 10)
 
     # Click the "Place ad" button
