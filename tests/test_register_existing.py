@@ -1,10 +1,10 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from helpers import register_user
+from helpers import register_user, generate_user_data
 
-def test_register_existing_user(driver, user_data):
-    email, password = user_data
+def test_register_existing_user(driver):
+    email, password = generate_user_data()
     
     # First, register the user
     register_user(driver, email, password)

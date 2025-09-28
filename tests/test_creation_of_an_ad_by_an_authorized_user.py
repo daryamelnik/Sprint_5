@@ -2,10 +2,10 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from helpers import register_user, login_user
+from helpers import register_user, login_user, generate_user_data
 
-def test_create_ad_authorized(driver, user_data):
-    email, password = user_data
+def test_create_ad_authorized(driver):
+    email, password = generate_user_data()
     
     # Register user
     register_user(driver, email, password)
@@ -48,7 +48,8 @@ def test_create_ad_authorized(driver, user_data):
 
     # Go to profile
     wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button.circleSmall"))).click()
-    wait.until(EC.element_to_be_clickable((By.XPATH, "//h3[contains( @class, 'profileText name')]"))).click()
+    profile_link = wait.until(EC.visibility_of_element_located((By.XPATH, "//h3[contains( @class, 'profileText name')]")))
+    driver.execute_script("arguments[0].click();", profile_link)
     wait.until(EC.url_contains("/profile"))
 
     # Verify ad is in profile

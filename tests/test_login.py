@@ -2,10 +2,10 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from helpers import register_user, login_user
+from helpers import register_user, login_user, generate_user_data
 
-def test_login(driver, user_data):
-    email, password = user_data
+def test_login(driver):
+    email, password = generate_user_data()
     
     # First, register the user
     register_user(driver, email, password)

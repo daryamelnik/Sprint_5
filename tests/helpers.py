@@ -1,7 +1,17 @@
+import random
+import string
 import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+
+def generate_user_data():
+    random_string = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
+    email = f"{random_string}@example.com"
+    password = "qwerty123456"
+    return email, password
+
 
 def register_user(driver, email, password):
     driver.get('https://qa-desk.stand.praktikum-services.ru/')
